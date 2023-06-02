@@ -6,6 +6,7 @@ export class CategoryViewModel {
       id: category.id,
       name: category.name.value,
       abbreviation: category.abbreviation.value,
+      active: category.active,
     }
   }
 }

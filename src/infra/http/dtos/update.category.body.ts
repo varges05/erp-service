@@ -1,6 +1,6 @@
 import { IsBoolean, IsNotEmpty, Length } from 'class-validator'
 
-export class CreateCategoryBody {
+export class UpdateCategoryBody {
   @IsNotEmpty()
   @Length(3, 20)
   name: string

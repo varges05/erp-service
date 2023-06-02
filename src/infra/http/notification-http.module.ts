@@ -6,10 +6,10 @@ import { CountRecipientNotification } from '@app/use-cases/count-recipient-notif
 import { GetRecipientNotification } from '@app/use-cases/get-recipient-notifications'
 import { ReadNotification } from '@app/use-cases/read-notification'
 import { UnreadNotification } from '@app/use-cases/unread-notification'
-import { DatabaseModuleNotification } from '../database/notification-database.module'
+import { DatabaseModule } from '../database/database.module'
 
 @Module({
-  imports: [DatabaseModuleNotification],
+  imports: [DatabaseModule],
   controllers: [NotificationController],
   providers: [
     SendNotification,

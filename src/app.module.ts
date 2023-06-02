@@ -1,15 +1,9 @@
 import { Module } from '@nestjs/common'
-import { HTTPModuleCategory } from './infra/http/category-http.module'
 import { HTTPModuleNotification } from './infra/http/notification-http.module'
-import { DatabaseModuleNotification } from './infra/database/notification-database.module'
-import { DatabaseModuleCategory } from './infra/database/category-database.module'
+import { DatabaseModule } from './infra/database/database.module'
+import { HTTPModuleCategory } from './infra/http/category-http.module'
 
 @Module({
-  imports: [
-    HTTPModuleNotification,
-    DatabaseModuleNotification,
-    DatabaseModuleCategory,
-    HTTPModuleCategory,
-  ],
+  imports: [HTTPModuleNotification, DatabaseModule, HTTPModuleCategory],
 })
 export class AppModule {}

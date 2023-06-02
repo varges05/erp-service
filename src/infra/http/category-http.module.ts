@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common'
 import { SaveCategory } from '@app/use-cases/category/save-category'
 import { CategoryController } from './controllers/category.controller'
-import { DatabaseModuleCategory } from '../database/category-database.module'
+import { GetCategory } from '@app/use-cases/category/get-category'
+import { DatabaseModule } from '../database/database.module'
+import { UpdateCategory } from '@app/use-cases/category/update-category'
+import { ListCategory } from '@app/use-cases/category/list-category'
 
 @Module({
-  imports: [DatabaseModuleCategory],
+  imports: [DatabaseModule],
   controllers: [CategoryController],
-  providers: [SaveCategory],
+  providers: [SaveCategory, GetCategory, UpdateCategory, ListCategory],
 })
 export class HTTPModuleCategory {}
