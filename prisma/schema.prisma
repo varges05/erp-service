@@ -22,3 +22,14 @@ model Notification {
   @@index([recipientId])
   @@map("notifications")
 }
+
+model Category {
+  id           String    @id
+  name         String
+  abbreviation String
+  active       Boolean   @default(true)
+  updatedAt    DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@map("categories")
+}
