@@ -62,7 +62,6 @@ export class Category {
     return this.props.abbreviation
   }
 
-  // Marca a notificação como lida, definindo a data de leitura como a data atual
   public updated() {
     this.props.updatedAt = new Date()
   }

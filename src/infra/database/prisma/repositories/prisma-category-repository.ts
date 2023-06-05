@@ -4,29 +4,35 @@ import { CategoriesRepository } from '@app/repositories/category-repository'
 import { PrismaService } from '../prisma.service'
 import { PrismaCategoryMapper } from '../mappers/prisma-category-mapper'
 import { Category } from '@app/entities/category/category'
-import { NotificationNotFound } from '@app/use-cases/errors/notification-not-found'
+import { CategoryNotFound } from '@app/use-cases/errors/category-not-found'
 
 @Injectable()
 export class PrismaCategoryRepository implements CategoriesRepository {
   constructor(private prisma: PrismaService) {}
-  async findAll(): Promise<Category[]> {
-    const rawCategories = await this.prisma.category.findMany()
-    return rawCategories.map((rawCategory) =>
-      PrismaCategoryMapper.toDomain(rawCategory),
-    )
+
+  async getCategoriesByProductId(productId: string): Promise<Category[]> {
+    const categories = await this.prisma.category.findMany({
+      where: {
+        ProductCategory: {
+          some: {
+            productId,
+          },
+        },
+      },
+    })
+
+    return categories.map(PrismaCategoryMapper.toDomain)
   }
 
-  async listAll(): Promise<Category[]> {
+  async findAll(): Promise<Category[]> {
     const rawCategories = await this.prisma.category.findMany()
-    return rawCategories.map((rawCategory) =>
-      PrismaCategoryMapper.toDomain(rawCategory),
-    )
+    return rawCategories.map(PrismaCategoryMapper.toDomain)
   }
 
   async update(category: Category): Promise<Category> {
     const { id, name, abbreviation, active } = category
 
-    await this.prisma.category.update({
+    const updatedCategory = await this.prisma.category.update({
       where: { id },
       data: {
         name: name.value,
@@ -35,12 +41,8 @@ export class PrismaCategoryRepository implements CategoriesRepository {
       },
     })
 
-    const updatedCategory = await this.prisma.category.findUnique({
-      where: { id },
-    })
-
     if (!updatedCategory) {
-      throw new NotificationNotFound()
+      throw new CategoryNotFound()
     }
 
     return PrismaCategoryMapper.toDomain(updatedCategory)
@@ -60,10 +62,6 @@ export class PrismaCategoryRepository implements CategoriesRepository {
     return PrismaCategoryMapper.toDomain(rawCategory)
   }
 
-  /**
-   * Cria uma nova notificação.
-   * @param category A notificação a ser criada.
-   */
   async create(category: Category): Promise<void> {
     const raw = PrismaCategoryMapper.toPrisma(category)
     await this.prisma.category.create({
@@ -71,10 +69,6 @@ export class PrismaCategoryRepository implements CategoriesRepository {
     })
   }
 
-  /**
-   * Atualiza uma notificação existente.
-   * @param category A notificação a ser atualizada.
-   */
   async save(category: Category): Promise<void> {
     const raw = PrismaCategoryMapper.toPrisma(category)
 

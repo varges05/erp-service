@@ -5,4 +5,5 @@ export abstract class CategoriesRepository {
   abstract findById(categoryId: string): Promise<Category | null>
   abstract update(category: Category): Promise<Category>
   abstract findAll(): Promise<Category[]>
+  abstract getCategoriesByProductId(productId: string): Promise<Category[]>
 }

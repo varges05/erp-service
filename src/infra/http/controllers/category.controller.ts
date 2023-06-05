@@ -5,7 +5,6 @@ import { SaveCategory } from '@app/use-cases/category/save-category'
 import { CategoryViewModel } from '../view-models/category-view-model'
 import { GetCategory } from '@app/use-cases/category/get-category'
 import { UpdateCategory } from '@app/use-cases/category/update-category'
-import { UpdateCategoryBody } from '../dtos/update.category.body'
 import { ListCategory } from '@app/use-cases/category/list-category'
 
 @Controller('categories')
@@ -27,7 +26,7 @@ export class CategoryController {
 
   @Patch('update/:id')
   async update(
-    @Body() body: UpdateCategoryBody,
+    @Body() body: CreateCategoryBody,
     @Param('id') categoryId: string,
   ) {
     const { name, abbreviation, active } = body

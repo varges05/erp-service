@@ -10,26 +10,114 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Notification {
-  id          String    @id
-  recipientId String
-  content     String
-  category    String
-  readAt      DateTime?
-  canceledAt  DateTime?
-  createdAt   DateTime  @default(now())
-
-  @@index([recipientId])
-  @@map("notifications")
-}
-
 model Category {
-  id           String    @id
-  name         String
-  abbreviation String
-  active       Boolean   @default(true)
-  updatedAt    DateTime?
-  createdAt    DateTime  @default(now())
+  id              String            @id
+  name            String
+  abbreviation    String
+  active          Boolean           @default(true)
+  updatedAt       DateTime?
+  createdAt       DateTime          @default(now())
+  ProductCategory ProductCategory[]
 
   @@map("categories")
+}
+
+model Product {
+  id              String            @id
+  name            String
+  price           Decimal
+  code            String
+  active          Boolean           @default(true)
+  updatedAt       DateTime?
+  createdAt       DateTime          @default(now())
+  ProductCategory ProductCategory[]
+
+  @@map("products")
+}
+
+model ProductCategory {
+  id         String   @id
+  productId  String
+  categoryId String
+  createdAt  DateTime @default(now())
+
+  categories Category @relation(fields: [categoryId], references: [id])
+  products   Product  @relation(fields: [productId], references: [id])
+
+  @@map("productsCategories")
+}
+
+model User {
+  id        String    @id
+  name      String
+  email     String    @unique
+  password  String
+  active    Boolean   @default(true)
+  updatedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("users")
+}
+
+model Seller {
+  id        String    @id
+  name      String
+  email     String    @unique
+  active    Boolean   @default(true)
+  updatedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("sellers")
+}
+
+model Customer {
+  id              String            @id
+  name            String
+  phone           String
+  email           String            @unique
+  active          Boolean           @default(true)
+  updatedAt       DateTime?
+  createdAt       DateTime          @default(now())
+  AddressCustomer AddressCustomer[]
+
+  @@map("customers")
+}
+
+model Address {
+  id              String            @id
+  road            String
+  neighborhood    String
+  number          String
+  cep             String
+  complement      String
+  updatedAt       DateTime?
+  createdAt       DateTime          @default(now())
+  AddressCustomer AddressCustomer[]
+  City            City[]
+
+  @@map("adresses")
+}
+
+model City {
+  id        String    @id
+  name      String
+  cep       String    @unique
+  updatedAt DateTime?
+  createdAt DateTime  @default(now())
+  address   Address   @relation(fields: [addressId], references: [id])
+  addressId String
+
+  @@map("cities")
+}
+
+model AddressCustomer {
+  id         String    @id
+  addressId  String
+  customerId String
+  updatedAt  DateTime?
+  createdAt  DateTime  @default(now())
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  address    Address   @relation(fields: [addressId], references: [id])
+
+  @@map("adressesCustomers")
 }
